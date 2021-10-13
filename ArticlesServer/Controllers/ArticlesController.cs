@@ -9,7 +9,7 @@ using System.IO;
 
 namespace ArticlesServer.Controllers
 {
-    [Route("ArticlesDB")]
+    [Route("ArticlesAPI")]
     [ApiController]
     public class ArticlesController : ControllerBase
     {
