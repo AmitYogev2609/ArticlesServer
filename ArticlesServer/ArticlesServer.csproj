@@ -15,7 +15,7 @@
 
   <ItemGroup>
     <Folder Include="DTO\" />
-    <Folder Include="wwwroot\" />
+    <Folder Include="wwwroot\Images\" />
   </ItemGroup>
 
 </Project>

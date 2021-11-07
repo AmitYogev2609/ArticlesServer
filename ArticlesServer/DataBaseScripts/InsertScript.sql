@@ -335,3 +335,11 @@ INSERT INTO Interests (InterestName) VALUES('Work')
 INSERT INTO Interests (InterestName) VALUES('Work-life balance')
 INSERT INTO Interests (InterestName) VALUES('Writing')
 INSERT INTO Interests (InterestName) VALUES('Youth')
+insert into users (FirstName,
+    LastName ,
+    UserName ,
+    BirthDay ,
+    Email ,
+    Pswd ,
+    IsManger ) VALUES
+    ('Amit', 'Yogev', 'Amit2609','26-sep-2004', 'amity2609@gmail.com','1234', 1)

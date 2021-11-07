@@ -5,14 +5,14 @@ using System.Collections.Generic;
 
 namespace ArticlesServerBL.Models
 {
-    public partial class UserReport
+    public partial class ArticleReport
     {
-        public int UserReportId { get; set; }
+        public int ArticleReportId { get; set; }
         public string Text { get; set; }
         public int UserIdReported { get; set; }
-        public int ReportedUserId { get; set; }
+        public int ReportedArticleId { get; set; }
 
-        public virtual User ReportedUser { get; set; }
+        public virtual Article ReportedArticle { get; set; }
         public virtual User UserIdReportedNavigation { get; set; }
     }
 }

@@ -45,9 +45,9 @@ namespace ArticlesServer
 
             //The following set the connection string to the DB and DB context!
             #region Add DB Context Support
-            string connectionString = this.Configuration.GetConnectionString("ArticlesDB");
+            string connectionString = this.Configuration.GetConnectionString("ArtiFindDB");
 
-            services.AddDbContext<ArticlesDBContext>(options => options
+            services.AddDbContext<ArtiFindDBContext>(options => options
                                                                 .UseSqlServer(connectionString));
             //.UseLazyLoadingProxies());
             #endregion

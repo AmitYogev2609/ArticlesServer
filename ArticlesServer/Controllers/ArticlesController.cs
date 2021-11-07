@@ -14,8 +14,8 @@ namespace ArticlesServer.Controllers
     public class ArticlesController : ControllerBase
     {
         #region Add connection to the db context using dependency injection
-        ArticlesDBContext context;
-        public ArticlesController(ArticlesDBContext context)
+        ArtiFindDBContext context;
+        public ArticlesController(ArtiFindDBContext context)
         {
             this.context = context;
         }

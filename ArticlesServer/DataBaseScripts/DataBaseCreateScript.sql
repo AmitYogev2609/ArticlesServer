@@ -1,7 +1,10 @@
-﻿create database ArticlesDB
+﻿use master
+--drop database ArtiFindDB
+
+create database ArtiFindDB
 go
 
-use ArticlesDB
+use ArtiFindDB
 go
 
 
@@ -23,8 +26,9 @@ CREATE TABLE Article(
 );
 
 CREATE TABLE AuthorsArticle(
-    UsersID INT identity(1,1) NOT NULL,
-    ArticleID INT NOT NULL
+    UserID INT  NOT NULL,
+    ArticleID INT NOT NULL,
+    CONSTRAINT AuthorsArticle_PK Primary KEY(UserID, ArticleID)
 );
 
 CREATE TABLE Interests(
@@ -34,15 +38,19 @@ CREATE TABLE Interests(
 
 CREATE TABLE FollwedInterests(
     UserId INT NOT NULL,
-    InterestID INT NOT NULL
+    InterestID INT NOT NULL,
+    CONSTRAINT FollwedInterests_PK Primary KEY(UserID, InterestID)
 );
-CREATE TABLE ArticleIntrestType(
-    ArticleID INT identity(1,1) NOT NULL,
-    IntrestID INT NOT NULL
+CREATE TABLE ArticleInterestType(
+    ArticleID INT NOT NULL,
+    InterestID INT NOT NULL,
+    CONSTRAINT ArticleInterestType_PK Primary KEY(ArticleID, InterestID)
 );
 CREATE TABLE Followedusers(
-    UserID INT identity(1,1) NOT NULL,
-    FollowingID INT NOT NULL
+    UserID INT NOT NULL,
+    FollowingID INT NOT NULL,
+    CONSTRAINT Followedusers_PK Primary KEY(UserID, FollowingID)
+
 );
 CREATE TABLE Comment(
     ComentID INT identity(1,1) NOT NULL PRIMARY KEY,
@@ -51,19 +59,25 @@ CREATE TABLE Comment(
     ArticleID INT NOT NULL
 );
 
-CREATE TABLE Report(
-    ReportID INT identity(1,1) NOT NULL PRIMARY KEY,
-    Text NVARCHAR(255) NOT NULL
+CREATE TABLE ArticleReport(
+    ArticleReportID INT identity(1,1) NOT NULL PRIMARY KEY,
+    Text NVARCHAR(255) NOT NULL,
+    UserIdReported INT NOT NULL Foreign key references Users(UserID),
+    ReportedArticleId INT NOT NULL Foreign key references Article(ArticleID),
 );
 
 CREATE TABLE UserReport(
-    ReportID INT identity(1,1) NOT NULL,
-    UserIdReported INT NOT NULL
+    UserReportID INT identity(1,1) NOT NULL PRIMARY KEY,
+    Text NVARCHAR(255) NOT NULL,
+    UserIdReported INT NOT NULL Foreign key references Users(UserID),
+    ReportedUserId INT NOT NULL Foreign key references Users(UserID),
 );
+
 CREATE TABLE FavoriteArticle(
-    ArticleID INT identity(1,1) NOT NULL,
+    ArticleID INT  NOT NULL,
     UserID INT NOT NULL
 );
+
 CREATE TABLE Message(
     MessageID INT identity(1,1) NOT NULL PRIMARY KEY,
     SenderID INT NOT NULL,
@@ -72,7 +86,7 @@ CREATE TABLE Message(
 );
 
 ALTER TABLE
-    AuthorsArticle ADD CONSTRAINT authorsarticle_usersid_foreign FOREIGN KEY(UsersID) REFERENCES Users(UserID);
+    AuthorsArticle ADD CONSTRAINT authorsarticle_usersid_foreign FOREIGN KEY(UserID) REFERENCES Users(UserID);
 ALTER TABLE
     FollwedInterests ADD CONSTRAINT follwedinterests_userid_foreign FOREIGN KEY(UserId) REFERENCES Users(UserID);
 ALTER TABLE
@@ -82,19 +96,15 @@ ALTER TABLE
 ALTER TABLE
     AuthorsArticle ADD CONSTRAINT authorsarticle_articleid_foreign FOREIGN KEY(ArticleID) REFERENCES Article(ArticleID);
 ALTER TABLE
-    ArticleIntrestType ADD CONSTRAINT articleintresttype_articleid_foreign FOREIGN KEY(ArticleID) REFERENCES Article(ArticleID);
+    ArticleInterestType ADD CONSTRAINT articleInteresttype_articleid_foreign FOREIGN KEY(ArticleID) REFERENCES Article(ArticleID);
 ALTER TABLE
     FollwedInterests ADD CONSTRAINT follwedinterests_interestid_foreign FOREIGN KEY(InterestID) REFERENCES Interests(InterestID);
 ALTER TABLE
-    ArticleIntrestType ADD CONSTRAINT articleintresttype_intrestid_foreign FOREIGN KEY(IntrestID) REFERENCES Interests(InterestID);
-ALTER TABLE
-    UserReport ADD CONSTRAINT userreport_reportid_foreign FOREIGN KEY(ReportID) REFERENCES Report(ReportID);
+    ArticleInterestType ADD CONSTRAINT articleInteresttype_Interestid_foreign FOREIGN KEY(InterestID) REFERENCES Interests(InterestID);
 ALTER TABLE
     Comment ADD CONSTRAINT comment_userid_foreign FOREIGN KEY(UserID) REFERENCES Users(UserID);
 ALTER TABLE
     Comment ADD CONSTRAINT comment_articleid_foreign FOREIGN KEY(ArticleID) REFERENCES Article(ArticleID);
-ALTER TABLE
-    UserReport ADD CONSTRAINT userreport_useridreported_foreign FOREIGN KEY(UserIdReported) REFERENCES Users(UserID);
 ALTER TABLE
     FavoriteArticle ADD CONSTRAINT favoritearticle_articleid_foreign FOREIGN KEY(ArticleID) REFERENCES Article(ArticleID);
 ALTER TABLE
@@ -103,3 +113,4 @@ ALTER TABLE
     Message ADD CONSTRAINT message_senderid_foreign FOREIGN KEY(SenderID) REFERENCES Users(UserID);
 ALTER TABLE
     Message ADD CONSTRAINT message_receiverid_foreign FOREIGN KEY(ReceiverID) REFERENCES Users(UserID);
+
