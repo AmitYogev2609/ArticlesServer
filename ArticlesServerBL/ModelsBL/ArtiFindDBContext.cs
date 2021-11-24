@@ -5,12 +5,16 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-using ArticlesServerBL.Models;
 
-namespace ArticlesServerBL.ModelsBL
+
+namespace ArticlesServerBL.Models
 {
-    public partial class ArtiFindDBContext: DbContext
+    public partial class ArtiFindDBContext :DbContext
     {
-        
+        public User LogIn(string email, string passwors)
+        {
+            User user= this.Users.Where(u=>u.Email==email&&u.Pswd==passwors).FirstOrDefault();
+            return user;
+        }
     }
 }
