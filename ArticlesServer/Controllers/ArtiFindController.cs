@@ -37,5 +37,22 @@ namespace ArticlesServer.Controllers
                 return null;
             }
         }
+        [Route("SendResetCode")]
+        [HttpGet]
+        public User CheckEmailAndSentCode([FromQuery] string email)
+        {
+            string resetCode = context.checkEmailAndGetCode(email);
+            if (resetCode != null)
+            {
+              
+                Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+                return resetCode;
+            }
+            else
+            {
+                Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+                return null;
+            }
+        }
     }
 }

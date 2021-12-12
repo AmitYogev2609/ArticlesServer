@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using ArticlesServerBL.Models;
 
 
 namespace ArticlesServerBL.Models
@@ -15,6 +16,15 @@ namespace ArticlesServerBL.Models
         {
             User user= this.Users.Where(u=>u.Email==email&&u.Pswd==passwors).FirstOrDefault();
             return user;
+        }
+        public User checkEmailAndGetCode(string email)
+        {
+            User user = this.Users.Where(u => u.Email == email).FirstOrDefault();
+            if (user != null)
+            {
+                return user;
+            }
+            else return null;
         }
     }
 }
