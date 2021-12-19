@@ -26,5 +26,10 @@ namespace ArticlesServerBL.Models
             }
             else return null;
         }
+        public bool EmailExist(string email)
+        {
+            User user = this.Users.Where(u => u.Email == email).FirstOrDefault();
+            return user != null;
+        }
     }
 }

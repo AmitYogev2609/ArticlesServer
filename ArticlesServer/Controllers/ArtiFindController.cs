@@ -37,22 +37,33 @@ namespace ArticlesServer.Controllers
                 return null;
             }
         }
-        [Route("SendResetCode")]
+        [Route("EmailExist")]
         [HttpGet]
-        public User CheckEmailAndSentCode([FromQuery] string email)
+        public bool EmailExist([FromQuery] string email)
         {
-            string resetCode = context.checkEmailAndGetCode(email);
-            if (resetCode != null)
-            {
-              
-                Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
-                return resetCode;
-            }
-            else
-            {
-                Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
-                return null;
-            }
-        }
+            bool exsit = context.EmailExist(email);
+
+            Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+            return exsit;
+
+
+        }        
+        //[Route("SendResetCode")]
+        //[HttpGet]
+        //public User CheckEmailAndSentCode([FromQuery] string email)
+        //{
+        //    string resetCode = context.checkEmailAndGetCode(email);
+        //    if (resetCode != null)
+        //    {
+
+        //        Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+        //        return resetCode;
+        //    }
+        //    else
+        //    {
+        //        Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+        //        return null;
+        //    }
+        //}
     }
 }
