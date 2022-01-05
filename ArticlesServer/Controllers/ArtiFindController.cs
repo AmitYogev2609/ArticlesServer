@@ -46,8 +46,17 @@ namespace ArticlesServer.Controllers
             Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
             return exsit;
 
+        }
+        [Route("UserNameExist")]
+        [HttpGet]
+        public bool UserNameExist([FromQuery] string UserName)
+        {
+            bool exsit = context.UserNameExist(UserName);
 
-        }        
+            Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+            return exsit;
+
+        }
         //[Route("SendResetCode")]
         //[HttpGet]
         //public User CheckEmailAndSentCode([FromQuery] string email)

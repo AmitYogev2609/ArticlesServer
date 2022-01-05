@@ -31,5 +31,10 @@ namespace ArticlesServerBL.Models
             User user = this.Users.Where(u => u.Email == email).FirstOrDefault();
             return user != null;
         }
+        public bool UserNameExist(string username)
+        {
+            User user = this.Users.Where(u => u.UserName == username).FirstOrDefault();
+            return user != null;
+        }
     }
 }
