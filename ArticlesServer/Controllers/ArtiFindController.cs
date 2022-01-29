@@ -43,7 +43,10 @@ namespace ArticlesServer.Controllers
         {
             bool exsit = context.EmailExist(email);
 
-            Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+            if (exsit)
+                Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+            else
+                Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
             return exsit;
 
         }
@@ -52,10 +55,23 @@ namespace ArticlesServer.Controllers
         public bool UserNameExist([FromQuery] string UserName)
         {
             bool exsit = context.UserNameExist(UserName);
-
+            if(exsit)
             Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+            else
+                Response.StatusCode=(int)System.Net.HttpStatusCode.Forbidden;
             return exsit;
 
+        }
+        [Route("GetInitialInterests")]
+        [HttpGet]
+        public List<Interest> GetInitialInterests()
+        {
+            List<Interest> list = context.GetInitialInterest();
+            if (list!=null)
+                Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+            else
+                Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+            return list;
         }
         //[Route("SendResetCode")]
         //[HttpGet]

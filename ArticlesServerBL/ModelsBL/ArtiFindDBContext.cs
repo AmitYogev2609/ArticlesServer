@@ -36,5 +36,17 @@ namespace ArticlesServerBL.Models
             User user = this.Users.Where(u => u.UserName == username).FirstOrDefault();
             return user != null;
         }
+        public List<Interest> GetInitialInterest()
+        {
+            List<string> names = help.createMainIntrest();
+            List<Interest> initialInterest = new List<Interest>();
+            foreach (string name in names)
+            {
+                Interest interest= Interests.Where(u=>u.InterestName==name).FirstOrDefault();
+                if(interest!=null)
+                    initialInterest.Add(interest);
+            }
+            return initialInterest;
+        }
     }
 }
