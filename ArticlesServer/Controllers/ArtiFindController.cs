@@ -80,6 +80,8 @@ namespace ArticlesServer.Controllers
         [HttpPost]
         public async Task<ActionResult> SignUP()
         {
+            try
+            { 
             if (!Request.Form.ContainsKey("myJsonObject") || (Request.Form.Files == null || !Request.Form.Files.Any())) { return BadRequest(); }
             var jsonModel = Request.Form.First(f => f.Key == "myJsonObject").Value;
 
@@ -87,16 +89,22 @@ namespace ArticlesServer.Controllers
             var stringReader = new StringReader(jsonModel);
             var jsonFile = await stringReader.ReadToEndAsync();
             User theUser = JsonSerializer.Deserialize<User>(jsonFile);
+                theUser = context.Signup(theUser);
+                if (theUser == null)
+                    return BadRequest();
+                IFormFile file = Request.Form.Files.First();
+                if (file == null)
+                    return Ok();
 
-            IFormFile file = Request.Form.Files.First();
-
-            var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", file.FileName);
+            var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", $"{theUser.UserId}.jpg");
             using (var stream = new FileStream(path, FileMode.Create))
             {
                 await file.CopyToAsync(stream);
             }
 
             return Ok();
+            }
+            catch (Exception ex) { return BadRequest(); }
         }
 
         

@@ -48,6 +48,14 @@ namespace ArticlesServerBL.Models
             }
             return initialInterest;
         }
+        public User Signup(User user)
+        {
+            if (user == null)
+                return null;
+            this.Users.Add(user);
+            this.SaveChanges();
+            return this.LogIn(user.Email, user.Pswd);
+        }
         
     }
 }
