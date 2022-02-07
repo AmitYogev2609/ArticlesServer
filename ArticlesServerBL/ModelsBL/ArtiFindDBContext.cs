@@ -48,5 +48,6 @@ namespace ArticlesServerBL.Models
             }
             return initialInterest;
         }
+        
     }
 }

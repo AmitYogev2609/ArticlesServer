@@ -1,4 +1,6 @@
-﻿INSERT INTO Interests (InterestName) VALUES('Activism')
+﻿use ArtiFindDB
+go
+INSERT INTO Interests (InterestName) VALUES('Activism')
 INSERT INTO Interests (InterestName) VALUES('Addiction')
 INSERT INTO Interests (InterestName) VALUES('Agriculture')
  INSERT INTO Interests (InterestName) VALUES('AI')

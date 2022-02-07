@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using ArticlesServerBL.Models;
 using System.IO;
 using System.Security.Cryptography;
-
+using System.Text.Json;
 
 namespace ArticlesServer.Controllers
 {
@@ -75,6 +75,28 @@ namespace ArticlesServer.Controllers
                 Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
            
             return list;
+        }
+        [Route("SignUp")]
+        [HttpPost]
+        public async Task<ActionResult> SignUP()
+        {
+            if (!Request.Form.ContainsKey("myJsonObject") || (Request.Form.Files == null || !Request.Form.Files.Any())) { return BadRequest(); }
+            var jsonModel = Request.Form.First(f => f.Key == "myJsonObject").Value;
+
+            //Deserilize
+            var stringReader = new StringReader(jsonModel);
+            var jsonFile = await stringReader.ReadToEndAsync();
+            User theUser = JsonSerializer.Deserialize<User>(jsonFile);
+
+            IFormFile file = Request.Form.Files.First();
+
+            var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", file.FileName);
+            using (var stream = new FileStream(path, FileMode.Create))
+            {
+                await file.CopyToAsync(stream);
+            }
+
+            return Ok();
         }
 
         
