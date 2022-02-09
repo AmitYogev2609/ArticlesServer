@@ -82,13 +82,13 @@ namespace ArticlesServer.Controllers
         {
             try
             { 
-            if (!Request.Form.ContainsKey("myJsonObject") || (Request.Form.Files == null || !Request.Form.Files.Any())) { return BadRequest(); }
-            var jsonModel = Request.Form.First(f => f.Key == "myJsonObject").Value;
+                if (!Request.Form.ContainsKey("myJsonObject") || (Request.Form.Files == null || !Request.Form.Files.Any())) { return BadRequest(); }
+                var jsonModel = Request.Form.First(f => f.Key == "myJsonObject").Value;
 
-            //Deserilize
-            var stringReader = new StringReader(jsonModel);
-            var jsonFile = await stringReader.ReadToEndAsync();
-            User theUser = JsonSerializer.Deserialize<User>(jsonFile);
+                //Deserilize
+                var stringReader = new StringReader(jsonModel);
+                var jsonFile = await stringReader.ReadToEndAsync();
+                User theUser = JsonSerializer.Deserialize<User>(jsonFile);
                 theUser = context.Signup(theUser);
                 if (theUser == null)
                     return BadRequest();
@@ -96,15 +96,17 @@ namespace ArticlesServer.Controllers
                 if (file == null)
                     return Ok();
 
-            var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", $"{theUser.UserId}.jpg");
-            using (var stream = new FileStream(path, FileMode.Create))
-            {
-                await file.CopyToAsync(stream);
+                var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", $"{theUser.UserId}.jpg");
+                using (var stream = new FileStream(path, FileMode.Create))
+                {
+                    await file.CopyToAsync(stream);
+                }
+                 return Ok();
             }
-
-            return Ok();
+            catch (Exception e)
+            { 
+                return BadRequest(); 
             }
-            catch (Exception ex) { return BadRequest(); }
         }
 
         

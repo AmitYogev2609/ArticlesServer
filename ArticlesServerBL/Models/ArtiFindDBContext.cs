@@ -132,7 +132,7 @@ namespace ArticlesServerBL.Models
             modelBuilder.Entity<Comment>(entity =>
             {
                 entity.HasKey(e => e.ComentId)
-                    .HasName("PK__Comment__A7BAF2A8E3ABB299");
+                    .HasName("PK__Comment__A7BAF2A819C20327");
 
                 entity.ToTable("Comment");
 
