@@ -1,5 +1,5 @@
 ﻿use master
---dop database ArtiFindDB
+--drop database ArtiFindDB
 
 create database ArtiFindDB
 go
