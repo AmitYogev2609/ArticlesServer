@@ -64,11 +64,11 @@ namespace ArticlesServer.Controllers
             return exsit;
 
         }
-        [Route("GetInitialInterests")]
+        [Route("GetInterests")]
         [HttpGet]
-        public List<Interest> GetInitialInterests()
+        public List<Interest> GetInterests()
         {
-            List<Interest> list = context.GetInitialInterest();
+            List<Interest> list = context.GetInterest();
             if (list!=null)
                 Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
             else
@@ -94,7 +94,7 @@ namespace ArticlesServer.Controllers
                     return BadRequest();
                 IFormFile file = Request.Form.Files.First();
                 if (file == null)
-                    return Ok();
+                    return BadRequest();
 
                 var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", $"{theUser.UserId}.jpg");
                 using (var stream = new FileStream(path, FileMode.Create))
