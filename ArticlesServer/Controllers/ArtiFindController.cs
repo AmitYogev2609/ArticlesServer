@@ -109,6 +109,7 @@ namespace ArticlesServer.Controllers
                 return BadRequest(); 
             }
         }
+        //sign up without image
         [Route("SignUp")]
         [HttpPost]
         public async Task<ActionResult> Signup([FromBody]User theUser)
