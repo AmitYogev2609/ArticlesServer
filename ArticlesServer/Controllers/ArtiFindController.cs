@@ -76,13 +76,14 @@ namespace ArticlesServer.Controllers
            
             return list;
         }
-        [Route("SignUp")]
+        [Route("SignUpWithImage")]
         [HttpPost]
-        public async Task<ActionResult> SignUP()
+        public async Task<ActionResult> SignUPWithIamge()
         {
             try
             { 
-                if (!Request.Form.ContainsKey("myJsonObject") || (Request.Form.Files == null || !Request.Form.Files.Any())) { return BadRequest(); }
+                if (!Request.Form.ContainsKey("myJsonObject") || (Request.Form.Files == null || !Request.Form.Files.Any()))
+                { return BadRequest(); }
                 var jsonModel = Request.Form.First(f => f.Key == "myJsonObject").Value;
 
                 //Deserilize
@@ -106,6 +107,22 @@ namespace ArticlesServer.Controllers
             catch (Exception e)
             { 
                 return BadRequest(); 
+            }
+        }
+        [Route("SignUp")]
+        [HttpPost]
+        public async Task<ActionResult> Signup([FromBody]User theUser)
+        {
+            try
+            { 
+            theUser = context.Signup(theUser);
+            if (theUser == null)
+                return BadRequest();
+            return Ok();
+            }
+            catch(Exception e)
+            {
+                return BadRequest();
             }
         }
 
