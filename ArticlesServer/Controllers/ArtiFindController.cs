@@ -8,6 +8,9 @@ using ArticlesServerBL.Models;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text.Json;
+using System.Text.Json.Serialization;
+using System.Text.Encodings.Web;
+using System.Text.Unicode;
 
 namespace ArticlesServer.Controllers
 {
@@ -81,15 +84,24 @@ namespace ArticlesServer.Controllers
         public async Task<ActionResult> SignUPWithIamge()
         {
             try
-            { 
-                if (!Request.Form.ContainsKey("myJsonObject") || (Request.Form.Files == null || !Request.Form.Files.Any()))
+            {
+                bool b1 = Request.Form.ContainsKey("myJsonObject");
+                bool b2 = Request.Form.Files == null;
+                bool b3 = !Request.Form.Files.Any();
+                if (!Request.Form.ContainsKey("myJsonObject") || Request.Form.Files == null || Request.Form.Files.Any())
                 { return BadRequest(); }
                 var jsonModel = Request.Form.First(f => f.Key == "myJsonObject").Value;
 
                 //Deserilize
+                JsonSerializerOptions options = new JsonSerializerOptions
+                {
+                    ReferenceHandler = ReferenceHandler.Preserve,
+                    Encoder = JavaScriptEncoder.Create(UnicodeRanges.Hebrew, UnicodeRanges.BasicLatin),
+                    PropertyNameCaseInsensitive = true
+                };
                 var stringReader = new StringReader(jsonModel);
                 var jsonFile = await stringReader.ReadToEndAsync();
-                User theUser = JsonSerializer.Deserialize<User>(jsonFile);
+                User theUser = JsonSerializer.Deserialize<User>(jsonFile, options);
                 theUser = context.Signup(theUser);
                 if (theUser == null)
                     return BadRequest();
