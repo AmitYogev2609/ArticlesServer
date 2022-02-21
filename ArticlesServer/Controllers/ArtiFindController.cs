@@ -11,9 +11,41 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace ArticlesServer.Controllers
 {
+
+    
+    public class JsonModelBinder : IModelBinder
+    {
+        public Task BindModelAsync(ModelBindingContext bindingContext)
+        {
+            if (bindingContext == null)
+            {
+                throw new ArgumentNullException(nameof(bindingContext));
+            }
+
+            // Check the value sent in
+            var valueProviderResult = bindingContext.ValueProvider.GetValue(bindingContext.ModelName);
+            if (valueProviderResult != ValueProviderResult.None)
+            {
+                bindingContext.ModelState.SetModelValue(bindingContext.ModelName, valueProviderResult);
+
+                // Attempt to convert the input value
+                var valueAsString = valueProviderResult.FirstValue;
+                var result = Newtonsoft.Json.JsonConvert.DeserializeObject(valueAsString, bindingContext.ModelType);
+                if (result != null)
+                {
+                    bindingContext.Result = ModelBindingResult.Success(result);
+                    return Task.CompletedTask;
+                }
+            }
+
+            return Task.CompletedTask;
+        }
+    }
+
     [Route("ArtiFindAPI")]
     [ApiController]
     public class ArtiFindController : ControllerBase
@@ -79,9 +111,41 @@ namespace ArticlesServer.Controllers
            
             return list;
         }
+
+
         [Route("SignUpWithImage")]
         [HttpPost]
-        public async Task<ActionResult> SignUPWithIamge()
+        public async Task<ActionResult> SignUPWithIamge([ModelBinder(BinderType = typeof(JsonModelBinder))] User myJsonObject,
+    IList<IFormFile> file)
+        {
+            try
+            { 
+                User theUser = context.Signup(myJsonObject);
+                if (theUser == null)
+                    return BadRequest();
+
+
+                if (file.First() == null)
+                    return BadRequest();
+
+                var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", $"{theUser.UserId}.jpg");
+                using (var stream = new FileStream(path, FileMode.Create))
+                {
+                    await file.First().CopyToAsync(stream);
+
+                }
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest();
+            }
+
+        }
+
+            [Route("SignUpWithImage_Old")]
+        [HttpPost]
+        public async Task<ActionResult> SignUPWithIamge(IFormCollection data, IFormFile file)
         {
             try
             {
@@ -91,7 +155,7 @@ namespace ArticlesServer.Controllers
                 if (!Request.Form.ContainsKey("myJsonObject") || Request.Form.Files == null || Request.Form.Files.Any())
                 { return BadRequest(); }
                 var jsonModel = Request.Form.First(f => f.Key == "myJsonObject").Value;
-
+                
                 //Deserilize
                 JsonSerializerOptions options = new JsonSerializerOptions
                 {
@@ -105,14 +169,19 @@ namespace ArticlesServer.Controllers
                 theUser = context.Signup(theUser);
                 if (theUser == null)
                     return BadRequest();
-                IFormFile file = Request.Form.Files.First();
-                if (file == null)
+
+                var stringFile = Request.Form.First(f => f.Key == "file").Value;
+                var theFile = new StreamReader(stringFile);
+
+                IFormFile file1 = Request.Form.Files.First();
+                if (file1 == null)
                     return BadRequest();
 
                 var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", $"{theUser.UserId}.jpg");
                 using (var stream = new FileStream(path, FileMode.Create))
                 {
                     await file.CopyToAsync(stream);
+                    
                 }
                  return Ok();
             }
