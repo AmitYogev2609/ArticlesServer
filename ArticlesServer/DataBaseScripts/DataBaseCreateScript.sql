@@ -21,8 +21,10 @@ CREATE TABLE Users(
 
 CREATE TABLE Article(
     ArticleID INT identity(1,1) NOT NULL PRIMARY KEY,
-    Text TEXT NOT NULL,
-    ArticleName NVARCHAR(255) NOT NULL
+    HtmlText TEXT NOT NULL,
+    ArticleName NVARCHAR(255) NOT NULL,
+    PublishDate DATETIME default(GETDATE()),
+    
 );
 
 CREATE TABLE AuthorsArticle(
