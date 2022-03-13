@@ -14,7 +14,8 @@ namespace ArticlesServerBL.Models
     {
         public User LogIn(string email, string passwors)
         {
-            User user= this.Users.Where(u=>u.Email==email&&u.Pswd==passwors).FirstOrDefault();
+            //להוסיף אינקלוד למשתמשים שעוקביפ אחריו למאמרים שלו לתחומי עינין שלו
+            User user = this.Users.Where(u => u.Email == email && u.Pswd == passwors).FirstOrDefault();
             return user;
         }
         public User checkEmailAndGetCode(string email)
@@ -50,6 +51,16 @@ namespace ArticlesServerBL.Models
             this.Users.Add(user);
             this.SaveChanges();
             return this.LogIn(user.Email, user.Pswd);
+        }
+        public List<User> GetUsers()
+        {
+            return Users.ToList<User>();
+        }
+        public List<Article> GetAllArticles()
+        { return Articles.ToList<Article>(); }
+        public List<Article> GetFollwedArticles(User user)
+        {
+            return null;
         }
         
     }

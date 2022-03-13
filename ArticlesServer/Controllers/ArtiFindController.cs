@@ -207,8 +207,37 @@ namespace ArticlesServer.Controllers
                 return BadRequest();
             }
         }
-
-        
+        [Route("GetArticles")]
+        [HttpGet]
+        public List<Article> GetArticles()
+        {
+            User user = HttpContext.Session.GetObject<User>("theUser");
+            List<Article> articles = context.GetFollwedArticles(user);
+            if(articles == null)
+                Response.StatusCode=(int)System.Net.HttpStatusCode.NotFound;
+            Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+            return articles;
+        }
+        [Route("GetUser")]
+        [HttpGet]
+        public List<User> GetUsers()
+        {
+            List<User> users = context.GetUsers();
+            if(users == null)
+                Response.StatusCode =(int)System.Net.HttpStatusCode.NotFound;
+            Response.StatusCode= (int)System.Net.HttpStatusCode.OK;
+            return users;
+        }
+        [Route("GetAllArticles")]
+        [HttpGet]
+        public List<Article> GetAllArticles()
+        {
+            List<Article> articles=context.GetAllArticles();
+            if(articles == null)
+                Response.StatusCode=((int)System.Net.HttpStatusCode.NotFound);
+            Response.StatusCode= (int)System.Net.HttpStatusCode.OK;
+            return articles;
+        }
         //[Route("SendResetCode")]
         //[HttpGet]
         //public User CheckEmailAndSentCode([FromQuery] string email)
