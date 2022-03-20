@@ -15,7 +15,11 @@ namespace ArticlesServerBL.Models
         public User LogIn(string email, string passwors)
         {
             //להוסיף אינקלוד למשתמשים שעוקביפ אחריו למאמרים שלו לתחומי עינין שלו
-            User user = this.Users.Where(u => u.Email == email && u.Pswd == passwors).FirstOrDefault();
+            User user = this.Users.Where(u => u.Email == email && u.Pswd == passwors)
+                .Include(u => u.FollwedInterests).ThenInclude(i => i.Interest).ThenInclude(ii => ii.ArticleInterestTypes).ThenInclude(ar => ar.Article)
+                .Include(u => u.AuthorsArticles).ThenInclude(a => a.Article)
+                .Include(u => u.FolloweduserFollowings).ThenInclude(f => f.User).ThenInclude(u => u.AuthorsArticles).ThenInclude(ar => ar.Article)
+                .Include(u => u.FolloweduserUsers).ThenInclude(f => f.User).FirstOrDefault();
             return user;
         }
         public User checkEmailAndGetCode(string email)
