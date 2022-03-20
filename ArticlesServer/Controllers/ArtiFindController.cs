@@ -118,8 +118,9 @@ namespace ArticlesServer.Controllers
         public async Task<ActionResult> SignUPWithIamge([ModelBinder(BinderType = typeof(JsonModelBinder))] User myJsonObject,
     IList<IFormFile> file)
         {
-            try
+             try
             { 
+
                 User theUser = context.Signup(myJsonObject);
                 if (theUser == null)
                     return BadRequest();
