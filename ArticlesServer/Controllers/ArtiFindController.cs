@@ -239,22 +239,17 @@ namespace ArticlesServer.Controllers
             Response.StatusCode= (int)System.Net.HttpStatusCode.OK;
             return articles;
         }
-        //[Route("SendResetCode")]
-        //[HttpGet]
-        //public User CheckEmailAndSentCode([FromQuery] string email)
-        //{
-        //    string resetCode = context.checkEmailAndGetCode(email);
-        //    if (resetCode != null)
-        //    {
-
-        //        Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
-        //        return resetCode;
-        //    }
-        //    else
-        //    {
-        //        Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
-        //        return null;
-        //    }
-        //}
-    }
+        
+        [Route("GetFavoriteArticles")]
+        [HttpGet]
+        public List<Article> GetFavoriteArticles()
+        {
+            User user = HttpContext.Session.GetObject<User>("theUser");
+            List<Article> articles = context.GetFavoriteArticles(user);
+            if(articles == null)
+                Response.StatusCode=(int)System.Net.HttpStatusCode.NotFound;
+            Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+            return articles;
         }
+    }
+}

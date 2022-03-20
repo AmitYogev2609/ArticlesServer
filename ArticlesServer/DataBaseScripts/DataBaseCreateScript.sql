@@ -115,7 +115,8 @@ ALTER TABLE
     Message ADD CONSTRAINT message_senderid_foreign FOREIGN KEY(SenderID) REFERENCES Users(UserID);
 ALTER TABLE
     Message ADD CONSTRAINT message_receiverid_foreign FOREIGN KEY(ReceiverID) REFERENCES Users(UserID);
-
 ALTER TABLE
     Interests ADD IsMajor bit default(0) NOT NULL
+ALTER TABLE
+    Article ADD Description NVARCHAR(255) NOT NULL
 

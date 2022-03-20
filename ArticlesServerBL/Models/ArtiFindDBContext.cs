@@ -41,7 +41,7 @@ namespace ArticlesServerBL.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasAnnotation("Relational:Collation", "Hebrew_CI_AS");
+            modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
 
             modelBuilder.Entity<Article>(entity =>
             {
@@ -50,6 +50,10 @@ namespace ArticlesServerBL.Models
                 entity.Property(e => e.ArticleId).HasColumnName("ArticleID");
 
                 entity.Property(e => e.ArticleName)
+                    .IsRequired()
+                    .HasMaxLength(255);
+
+                entity.Property(e => e.Description)
                     .IsRequired()
                     .HasMaxLength(255);
 
@@ -132,7 +136,7 @@ namespace ArticlesServerBL.Models
             modelBuilder.Entity<Comment>(entity =>
             {
                 entity.HasKey(e => e.ComentId)
-                    .HasName("PK__Comment__A7BAF2A819C20327");
+                    .HasName("PK__Comment__A7BAF2A884F8D7E2");
 
                 entity.ToTable("Comment");
 

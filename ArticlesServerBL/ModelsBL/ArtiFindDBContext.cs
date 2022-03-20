@@ -19,7 +19,9 @@ namespace ArticlesServerBL.Models
                 .Include(u => u.FollwedInterests).ThenInclude(i => i.Interest).ThenInclude(ii => ii.ArticleInterestTypes).ThenInclude(ar => ar.Article)
                 .Include(u => u.AuthorsArticles).ThenInclude(a => a.Article)
                 .Include(u => u.FolloweduserFollowings).ThenInclude(f => f.User).ThenInclude(u => u.AuthorsArticles).ThenInclude(ar => ar.Article)
-                .Include(u => u.FolloweduserUsers).ThenInclude(f => f.User).FirstOrDefault();
+                .Include(u => u.FolloweduserUsers).ThenInclude(f => f.User)
+                .FirstOrDefault()
+                ;
             return user;
         }
         public User checkEmailAndGetCode(string email)
@@ -66,6 +68,17 @@ namespace ArticlesServerBL.Models
         {
             return null;
         }
-        
+        public List<Article> GetFavoriteArticles(User user)
+        {
+            List<Article> Articles = new List<Article>();
+            foreach (FavoriteArticle Fa in this.FavoriteArticles)
+            {
+                if(Fa.UserId==user.UserId)
+                {
+                    Articles.Add(Fa.Article);
+                }
+            }
+            return Articles;
+        }
     }
 }
