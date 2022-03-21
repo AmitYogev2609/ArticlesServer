@@ -23,7 +23,7 @@ CREATE TABLE Article(
     ArticleID INT identity(1,1) NOT NULL PRIMARY KEY,
     HtmlText TEXT NOT NULL,
     ArticleName NVARCHAR(255) NOT NULL,
-    PublishDate DATETIME default(GETDATE()),
+    PublishDate DATETIME default(GETDATE()) NOT NULL,
     
 );
 

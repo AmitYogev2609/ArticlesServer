@@ -178,7 +178,7 @@ namespace ArticlesServer.Controllers
                 if (file1 == null)
                     return BadRequest();
 
-                var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", $"{theUser.UserId}.jpg");
+                var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/UserImage", $"{theUser.UserId}.jpg");
                 using (var stream = new FileStream(path, FileMode.Create))
                 {
                     await file.CopyToAsync(stream);

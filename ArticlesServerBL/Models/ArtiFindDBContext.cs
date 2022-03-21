@@ -41,7 +41,7 @@ namespace ArticlesServerBL.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasAnnotation("Relational:Collation", "Hebrew_CI_AS");
+            modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
 
             modelBuilder.Entity<Article>(entity =>
             {
@@ -140,7 +140,7 @@ namespace ArticlesServerBL.Models
             modelBuilder.Entity<Comment>(entity =>
             {
                 entity.HasKey(e => e.ComentId)
-                    .HasName("PK__Comment__A7BAF2A85C614564");
+                    .HasName("PK__Comment__A7BAF2A8472BA779");
 
                 entity.ToTable("Comment");
 
