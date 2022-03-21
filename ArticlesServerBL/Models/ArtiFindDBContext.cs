@@ -41,7 +41,7 @@ namespace ArticlesServerBL.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
+            modelBuilder.HasAnnotation("Relational:Collation", "Hebrew_CI_AS");
 
             modelBuilder.Entity<Article>(entity =>
             {
@@ -57,9 +57,13 @@ namespace ArticlesServerBL.Models
                     .IsRequired()
                     .HasMaxLength(255);
 
-                entity.Property(e => e.Text)
+                entity.Property(e => e.HtmlText)
                     .IsRequired()
                     .HasColumnType("text");
+
+                entity.Property(e => e.PublishDate)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
             });
 
             modelBuilder.Entity<ArticleInterestType>(entity =>
@@ -100,13 +104,13 @@ namespace ArticlesServerBL.Models
                     .WithMany(p => p.ArticleReports)
                     .HasForeignKey(d => d.ReportedArticleId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__ArticleRe__Repor__35BCFE0A");
+                    .HasConstraintName("FK__ArticleRe__Repor__36B12243");
 
                 entity.HasOne(d => d.UserIdReportedNavigation)
                     .WithMany(p => p.ArticleReports)
                     .HasForeignKey(d => d.UserIdReported)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__ArticleRe__UserI__34C8D9D1");
+                    .HasConstraintName("FK__ArticleRe__UserI__35BCFE0A");
             });
 
             modelBuilder.Entity<AuthorsArticle>(entity =>
@@ -136,7 +140,7 @@ namespace ArticlesServerBL.Models
             modelBuilder.Entity<Comment>(entity =>
             {
                 entity.HasKey(e => e.ComentId)
-                    .HasName("PK__Comment__A7BAF2A884F8D7E2");
+                    .HasName("PK__Comment__A7BAF2A85C614564");
 
                 entity.ToTable("Comment");
 
@@ -305,13 +309,13 @@ namespace ArticlesServerBL.Models
                     .WithMany(p => p.UserReportReportedUsers)
                     .HasForeignKey(d => d.ReportedUserId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__UserRepor__Repor__398D8EEE");
+                    .HasConstraintName("FK__UserRepor__Repor__3A81B327");
 
                 entity.HasOne(d => d.UserIdReportedNavigation)
                     .WithMany(p => p.UserReportUserIdReportedNavigations)
                     .HasForeignKey(d => d.UserIdReported)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__UserRepor__UserI__38996AB5");
+                    .HasConstraintName("FK__UserRepor__UserI__398D8EEE");
             });
 
             OnModelCreatingPartial(modelBuilder);
