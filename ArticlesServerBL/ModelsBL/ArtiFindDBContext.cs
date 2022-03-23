@@ -64,7 +64,7 @@ namespace ArticlesServerBL.Models
                 return null;
             this.Articles.Add(article);
             this.SaveChanges();
-            return this.Articles.Where(art => art.HtmlText == article.HtmlText).FirstOrDefault();
+            return this.Articles.Find(article);
         }
         public List<User> GetUsers()
         {
