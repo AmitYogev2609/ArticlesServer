@@ -64,7 +64,7 @@ namespace ArticlesServerBL.Models
                 return null;
             this.Articles.Add(article);
             this.SaveChanges();
-            return this.Articles.Find(article);
+            return article;
         }
         public List<User> GetUsers()
         {
