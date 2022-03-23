@@ -129,7 +129,7 @@ namespace ArticlesServer.Controllers
                 if (file.First() == null)
                     return BadRequest();
 
-                var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", $"{theUser.UserId}.jpg");
+                var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/UserImage", $"{theUser.UserId}.jpg");
                 using (var stream = new FileStream(path, FileMode.Create))
                 {
                     await file.First().CopyToAsync(stream);
@@ -250,6 +250,36 @@ namespace ArticlesServer.Controllers
                 Response.StatusCode=(int)System.Net.HttpStatusCode.NotFound;
             Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
             return articles;
+        }
+        [Route("UploadArticle")]
+        [HttpPost]
+        public async Task<ActionResult> AddArticle([ModelBinder(BinderType = typeof(JsonModelBinder))] Article myJsonObject,
+   IList<IFormFile> file)
+        {
+            try
+            {
+                Article article=context.addArticle(myJsonObject);
+               
+                if (article == null)
+                    return BadRequest();
+
+
+                if (file.First() == null)
+                    return BadRequest();
+
+                var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/ArticleImage", $"{article.ArticleId}.jpg");
+                using (var stream = new FileStream(path, FileMode.Create))
+                {
+                    await file.First().CopyToAsync(stream);
+
+                }
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest();
+            }
+
         }
     }
 }

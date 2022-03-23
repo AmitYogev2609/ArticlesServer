@@ -245,3 +245,11 @@ insert into users (FirstName,
     Pswd ,
     IsManger ) VALUES
     ('Amit', 'Yogev', 'Amit2609','26-sep-2004', 'amity2609@gmail.com','1234', 1)
+    insert into users (FirstName,
+    LastName ,
+    UserName ,
+    BirthDay ,
+    Email ,
+    Pswd ,
+    IsManger ) VALUES
+    ('Amit2', 'Yogev2', 'Amit','26-sep-2004', 'amit2609@gmail.com','12345', 1)

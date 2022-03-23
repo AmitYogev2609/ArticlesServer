@@ -58,6 +58,14 @@ namespace ArticlesServerBL.Models
             this.SaveChanges();
             return this.LogIn(user.Email, user.Pswd);
         }
+        public Article addArticle(Article article)
+        {
+            if (article == null)
+                return null;
+            this.Articles.Add(article);
+            this.SaveChanges();
+            return this.Articles.Where(art => art.HtmlText == article.HtmlText).FirstOrDefault();
+        }
         public List<User> GetUsers()
         {
             return Users.ToList<User>();
