@@ -16,7 +16,7 @@ namespace ArticlesServerBL.Models
         {
             //להוסיף אינקלוד למשתמשים שעוקביפ אחריו למאמרים שלו לתחומי עינין שלו
             User user = this.Users.Where(u => u.Email == email && u.Pswd == passwors)
-                .Include(u => u.FollwedInterests).ThenInclude(i => i.Interest).ThenInclude(ii => ii.ArticleInterestTypes).ThenInclude(ar => ar.Article)
+                .Include(u => u.FollwedInterests).ThenInclude(i => i.Interest).ThenInclude(ii => ii.ArticleInterestTypes).ThenInclude(ar => ar.Article).ThenInclude(art=>art.AuthorsArticles).ThenInclude(tf=>tf.User)
                 .Include(u => u.AuthorsArticles).ThenInclude(a => a.Article)
                 .Include(u => u.FolloweduserFollowings).ThenInclude(f => f.User).ThenInclude(u => u.AuthorsArticles).ThenInclude(ar => ar.Article)
                 .Include(u => u.FolloweduserUsers).ThenInclude(f => f.User)
