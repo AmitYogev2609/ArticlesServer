@@ -46,7 +46,8 @@ namespace ArticlesServerBL.Models
         public List<Interest> GetInterest()
         {
 
-            List<Interest> Interest = this.Interests.ToList<Interest>();
+            List<Interest> Interest = this.Interests.Include(u=>u.ArticleInterestTypes).ThenInclude(arti=>arti.Article)
+                .Include(t=>t.FollwedInterests).ThenInclude(tu=>tu.User).ToList<Interest>();
             
             return Interest;
         }
