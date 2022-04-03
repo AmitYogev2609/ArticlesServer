@@ -13,6 +13,7 @@ namespace ArticlesServerBL.Models
             ArticleReports = new HashSet<ArticleReport>();
             AuthorsArticles = new HashSet<AuthorsArticle>();
             Comments = new HashSet<Comment>();
+            FavoriteArticles = new HashSet<FavoriteArticle>();
         }
 
         public int ArticleId { get; set; }
@@ -25,5 +26,6 @@ namespace ArticlesServerBL.Models
         public virtual ICollection<ArticleReport> ArticleReports { get; set; }
         public virtual ICollection<AuthorsArticle> AuthorsArticles { get; set; }
         public virtual ICollection<Comment> Comments { get; set; }
+        public virtual ICollection<FavoriteArticle> FavoriteArticles { get; set; }
     }
 }

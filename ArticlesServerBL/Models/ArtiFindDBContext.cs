@@ -104,13 +104,13 @@ namespace ArticlesServerBL.Models
                     .WithMany(p => p.ArticleReports)
                     .HasForeignKey(d => d.ReportedArticleId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__ArticleRe__Repor__36B12243");
+                    .HasConstraintName("FK__ArticleRe__Repor__5070F446");
 
                 entity.HasOne(d => d.UserIdReportedNavigation)
                     .WithMany(p => p.ArticleReports)
                     .HasForeignKey(d => d.UserIdReported)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__ArticleRe__UserI__35BCFE0A");
+                    .HasConstraintName("FK__ArticleRe__UserI__4F7CD00D");
             });
 
             modelBuilder.Entity<AuthorsArticle>(entity =>
@@ -140,7 +140,7 @@ namespace ArticlesServerBL.Models
             modelBuilder.Entity<Comment>(entity =>
             {
                 entity.HasKey(e => e.ComentId)
-                    .HasName("PK__Comment__A7BAF2A8472BA779");
+                    .HasName("PK__Comment__A7BAF2A8D26E6E44");
 
                 entity.ToTable("Comment");
 
@@ -169,22 +169,23 @@ namespace ArticlesServerBL.Models
 
             modelBuilder.Entity<FavoriteArticle>(entity =>
             {
-                entity.HasNoKey();
+                entity.HasKey(e => new { e.UserId, e.ArticleId })
+                    .HasName("FavoriteArticle_PK");
 
                 entity.ToTable("FavoriteArticle");
 
-                entity.Property(e => e.ArticleId).HasColumnName("ArticleID");
-
                 entity.Property(e => e.UserId).HasColumnName("UserID");
 
+                entity.Property(e => e.ArticleId).HasColumnName("ArticleID");
+
                 entity.HasOne(d => d.Article)
-                    .WithMany()
+                    .WithMany(p => p.FavoriteArticles)
                     .HasForeignKey(d => d.ArticleId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("favoritearticle_articleid_foreign");
 
                 entity.HasOne(d => d.User)
-                    .WithMany()
+                    .WithMany(p => p.FavoriteArticles)
                     .HasForeignKey(d => d.UserId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("favoritearticle_userid_foreign");
@@ -309,13 +310,13 @@ namespace ArticlesServerBL.Models
                     .WithMany(p => p.UserReportReportedUsers)
                     .HasForeignKey(d => d.ReportedUserId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__UserRepor__Repor__3A81B327");
+                    .HasConstraintName("FK__UserRepor__Repor__5DCAEF64");
 
                 entity.HasOne(d => d.UserIdReportedNavigation)
                     .WithMany(p => p.UserReportUserIdReportedNavigations)
                     .HasForeignKey(d => d.UserIdReported)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__UserRepor__UserI__398D8EEE");
+                    .HasConstraintName("FK__UserRepor__UserI__5CD6CB2B");
             });
 
             OnModelCreatingPartial(modelBuilder);

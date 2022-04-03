@@ -20,6 +20,7 @@ namespace ArticlesServerBL.Models
                 .Include(u => u.AuthorsArticles).ThenInclude(a => a.Article)
                 .Include(u => u.FolloweduserFollowings).ThenInclude(f => f.User).ThenInclude(u => u.AuthorsArticles).ThenInclude(ar => ar.Article)
                 .Include(u => u.FolloweduserUsers).ThenInclude(f => f.User)
+                .Include(u => u.FavoriteArticles).ThenInclude(f => f.Article)
                 .FirstOrDefault()
                 ;
             return user;
@@ -88,6 +89,19 @@ namespace ArticlesServerBL.Models
                 }
             }
             return Articles;
+        }
+        public bool UptadeFavoriteArticle(Article article,User user)
+        {
+            FavoriteArticle favoriteArticle = new FavoriteArticle()
+            {
+                ArticleId=article.ArticleId,
+                UserId=user.UserId
+            };
+            
+            User user1 = this.Users.Where(u => u.Email == user.Email && u.Pswd == user.Pswd).FirstOrDefault();
+            user1.FavoriteArticles.Add(favoriteArticle);
+            this.SaveChanges();
+            return true;
         }
     }
 }

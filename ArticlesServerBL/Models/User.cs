@@ -12,6 +12,7 @@ namespace ArticlesServerBL.Models
             ArticleReports = new HashSet<ArticleReport>();
             AuthorsArticles = new HashSet<AuthorsArticle>();
             Comments = new HashSet<Comment>();
+            FavoriteArticles = new HashSet<FavoriteArticle>();
             FolloweduserFollowings = new HashSet<Followeduser>();
             FolloweduserUsers = new HashSet<Followeduser>();
             FollwedInterests = new HashSet<FollwedInterest>();
@@ -33,6 +34,7 @@ namespace ArticlesServerBL.Models
         public virtual ICollection<ArticleReport> ArticleReports { get; set; }
         public virtual ICollection<AuthorsArticle> AuthorsArticles { get; set; }
         public virtual ICollection<Comment> Comments { get; set; }
+        public virtual ICollection<FavoriteArticle> FavoriteArticles { get; set; }
         public virtual ICollection<Followeduser> FolloweduserFollowings { get; set; }
         public virtual ICollection<Followeduser> FolloweduserUsers { get; set; }
         public virtual ICollection<FollwedInterest> FollwedInterests { get; set; }

@@ -119,4 +119,6 @@ ALTER TABLE
     Interests ADD IsMajor bit default(0) NOT NULL
 ALTER TABLE
     Article ADD Description NVARCHAR(255) NOT NULL
+ALTER TABLE
+    FavoriteArticle ADD CONSTRAINT FavoriteArticle_PK Primary KEY(UserID, ArticleId)
 
