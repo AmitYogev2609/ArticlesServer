@@ -103,5 +103,16 @@ namespace ArticlesServerBL.Models
             this.SaveChanges();
             return true;
         }
+      
+        public bool RemoveFavoriteArticle(Article article, User user)
+        {
+           
+            User user1 = this.Users.Where(u => u.Email == user.Email && u.Pswd == user.Pswd).Include(u=>u.FavoriteArticles).ThenInclude(far=>far.Article).FirstOrDefault();
+            FavoriteArticle favoriteArticle = user1.FavoriteArticles.Where(u => u.ArticleId == article.ArticleId).FirstOrDefault();
+            bool suc= user1.FavoriteArticles.Remove(favoriteArticle);
+            
+            this.SaveChanges();
+            return suc;
+        }
     }
 }

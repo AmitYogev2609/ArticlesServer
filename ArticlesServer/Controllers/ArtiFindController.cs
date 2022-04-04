@@ -300,6 +300,25 @@ namespace ArticlesServer.Controllers
             Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
             return newuser;
         }
+        [Route("RemoveFavoriteArticle")]
+        [HttpPost]
+        public async Task<User> RemoveFavoriteArticle([FromBody] Article article)
+        {
+            User user = HttpContext.Session.GetObject<User>("theUser");
+            if (!context.RemoveFavoriteArticle(article, user))
+            {
+                Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+                return null;
+            }
+            User newuser = context.LogIn(user.Email, user.Pswd);
+            if (newuser == null)
+            {
+                Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+                return null;
+            }
+            Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+            return newuser;
+        }
     }
 }
 //scaffold-dbcontext "Server=localhost\sqlexpress;Database=ArtiFindDB;Trusted_Connection=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -force Server=localhost\sqlexpress;Database=ArtiFindDB;Trusted_Connection=True;
