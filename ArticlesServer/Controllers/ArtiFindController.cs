@@ -319,6 +319,30 @@ namespace ArticlesServer.Controllers
             Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
             return newuser;
         }
+        [Route("UnFollowInterest")]
+        [HttpGet]
+        public User UnFollowInterest([FromQuery] int userid,[FromQuery] int interestid)
+        {
+            bool suc= context.UnFollowInterest(userid,interestid);
+            if (suc)
+            {
+                User user = context.GetUserById(userid);
+                return context.LogIn(user.Email,user.Pswd);
+            }
+            return null;
+        }
+        [Route("FollowInterest")]
+        [HttpGet]
+        public User FollowInterest([FromQuery] int userid, [FromQuery] int interestid)
+        {
+            bool suc = context.FollowInterest(userid, interestid);
+            if (suc)
+            {
+                User user = context.GetUserById(userid);
+                return context.LogIn(user.Email, user.Pswd);
+            }
+            return null;
+        }
     }
 }
 //scaffold-dbcontext "Server=localhost\sqlexpress;Database=ArtiFindDB;Trusted_Connection=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -force Server=localhost\sqlexpress;Database=ArtiFindDB;Trusted_Connection=True;

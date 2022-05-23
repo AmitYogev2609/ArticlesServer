@@ -47,7 +47,7 @@ namespace ArticlesServerBL.Models
         public List<Interest> GetInterest()
         {
 
-            List<Interest> Interest = this.Interests.Include(u=>u.ArticleInterestTypes).ThenInclude(arti=>arti.Article)
+            List<Interest> Interest = this.Interests.Include(u=>u.ArticleInterestTypes).ThenInclude(arti=>arti.Article).ThenInclude(cle=>cle.AuthorsArticles).ThenInclude(ath=>ath.User)
                 .Include(t=>t.FollwedInterests).ThenInclude(tu=>tu.User).ToList<Interest>();
             
             return Interest;
@@ -113,6 +113,33 @@ namespace ArticlesServerBL.Models
             
             this.SaveChanges();
             return suc;
+        }
+        public User GetUserById(int userid)
+        {
+            return this.Users.Where(u => u.UserId == userid).FirstOrDefault();
+        }
+        public bool UnFollowInterest(int userid,int interestid)
+        {
+            User user = this.Users.Where(u => u.UserId == userid).Include(u=>u.FollwedInterests).FirstOrDefault();
+            Interest interest = this.Interests.Where(intr=>intr.InterestId==interestid).FirstOrDefault();
+            FollwedInterest follwedInterest= user.FollwedInterests.Where((fr) => fr.InterestId==interestid).FirstOrDefault();
+            bool suc= user.FollwedInterests.Remove(follwedInterest);
+            this.SaveChanges();
+            bool suc2= interest.FollwedInterests.Where(fi=>fi.UserId==user.UserId).FirstOrDefault()==null;
+            return suc && suc2;
+        }
+        public bool FollowInterest(int userid, int interestid)
+        {
+            User user = this.Users.Where(u => u.UserId == userid).Include(u => u.FollwedInterests).FirstOrDefault();
+            Interest interest = this.Interests.Where(intr => intr.InterestId == interestid).FirstOrDefault();
+            
+             user.FollwedInterests.Add(new FollwedInterest() 
+            { UserId=user.UserId,
+            InterestId=interestid,
+            });
+            this.SaveChanges();
+            bool suc2 = interest.FollwedInterests.Where(fi => fi.UserId == user.UserId).FirstOrDefault() != null;
+            return suc2;
         }
     }
 }
