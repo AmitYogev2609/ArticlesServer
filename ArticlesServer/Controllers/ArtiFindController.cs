@@ -74,6 +74,22 @@ namespace ArticlesServer.Controllers
                 return null;
             }
         }
+        [Route("LogInWithoutSession")]
+        [HttpGet]
+        public User LogInWithoutSession([FromQuery] string email, [FromQuery] string password)
+        {
+            User user = context.LogIn(email, password);
+            if (user != null)
+            {
+                Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+                return user;
+            }
+            else
+            {
+                Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+                return null;
+            }
+        }
         [Route("EmailExist")]
         [HttpGet]
         public bool EmailExist([FromQuery] string email)
