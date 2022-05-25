@@ -120,11 +120,38 @@ namespace ArticlesServer.Controllers
         public List<Interest> GetInterests()
         {
             List<Interest> list = context.GetInterest();
+
+            
+
             if (list!=null)
                 Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
             else
                 Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
-           
+            //List<Interest> newList = new List<Interest>();
+            //newList.Add(list[num-1]);
+            //foreach (Interest i in newList)
+            //{
+            //    foreach (ArticleInterestType t in i.ArticleInterestTypes)
+            //    {
+            //        t.Article.HtmlText = "kuku";
+            //        foreach(ArticleInterestType ii in t.Article.ArticleInterestTypes)
+            //        {
+            //            ii.Article.HtmlText = "kuku";
+            //        }
+            //    }
+            //}
+            //return newList;
+            //foreach (Interest i in list)
+            //{
+            //    foreach (ArticleInterestType t in i.ArticleInterestTypes)
+            //    {
+            //        t.Article.HtmlText = "kuku";
+            //        foreach (ArticleInterestType ii in t.Article.ArticleInterestTypes)
+            //        {
+            //            ii.Article.HtmlText = "kuku";
+            //        }
+            //    }
+            //}
             return list;
         }
 

@@ -47,9 +47,11 @@ namespace ArticlesServerBL.Models
         public List<Interest> GetInterest()
         {
 
-            List<Interest> Interest = this.Interests.Include(u=>u.ArticleInterestTypes).ThenInclude(arti=>arti.Article).ThenInclude(cle=>cle.AuthorsArticles).ThenInclude(ath=>ath.User)
-                .Include(t=>t.FollwedInterests).ThenInclude(tu=>tu.User).ToList<Interest>();
-            
+            //List<Interest> Interest = this.Interests.Include(u=>u.ArticleInterestTypes).ThenInclude(arti=>arti.Article).ThenInclude(cle=>cle.AuthorsArticles).ThenInclude(ath=>ath.User)
+            //    .Include(t=>t.FollwedInterests).ThenInclude(tu=>tu.User).ToList<Interest>();
+            List<Interest> Interest = this.Interests.Include(u => u.ArticleInterestTypes).ThenInclude(arti => arti.Article).ThenInclude(cle => cle.AuthorsArticles)
+                .ToList<Interest>();
+
             return Interest;
         }
         public User Signup(User user)
