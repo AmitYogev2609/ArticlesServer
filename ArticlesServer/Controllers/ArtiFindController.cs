@@ -61,6 +61,8 @@ namespace ArticlesServer.Controllers
         [HttpGet]
         public User LogIn([FromQuery] string email, [FromQuery] string password) 
         {
+            try
+            { 
             User user = context.LogIn(email, password);
             if(user != null)
             {
@@ -70,6 +72,13 @@ namespace ArticlesServer.Controllers
             }
             else
             {
+                Response.StatusCode= (int)System.Net.HttpStatusCode.Forbidden;
+                return null;
+            }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
                 Response.StatusCode= (int)System.Net.HttpStatusCode.Forbidden;
                 return null;
             }
@@ -369,9 +378,11 @@ namespace ArticlesServer.Controllers
             bool suc= context.UnFollowInterest(userid,interestid);
             if (suc)
             {
+                Response.StatusCode= (int)System.Net.HttpStatusCode.OK;
                 User user = context.GetUserById(userid);
                 return context.LogIn(user.Email,user.Pswd);
             }
+            Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
             return null;
         }
         [Route("FollowInterest")]
@@ -381,10 +392,25 @@ namespace ArticlesServer.Controllers
             bool suc = context.FollowInterest(userid, interestid);
             if (suc)
             {
+                Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
                 User user = context.GetUserById(userid);
                 return context.LogIn(user.Email, user.Pswd);
             }
+            Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
             return null;
+        }
+        [Route("GetUserDetails")]
+        [HttpGet]
+        public User GetUserDetails([FromQuery]int id)
+        {
+            User user= context.GetUserDetails(id);
+            if(user==null)
+            {
+                Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+                return null ;
+            }
+            Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+            return user;
         }
     }
 }

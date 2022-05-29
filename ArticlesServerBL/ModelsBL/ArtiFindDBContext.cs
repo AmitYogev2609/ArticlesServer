@@ -143,5 +143,15 @@ namespace ArticlesServerBL.Models
             bool suc2 = interest.FollwedInterests.Where(fi => fi.UserId == user.UserId).FirstOrDefault() != null;
             return suc2;
         }
+        public User GetUserDetails(int id)
+        {
+            User user = this.Users.Where(u => u.UserId == id)
+                .Include(u => u.AuthorsArticles).ThenInclude(a => a.Article)
+                .Include(u => u.FollwedInterests)
+                .Include(u => u.FolloweduserFollowings).ThenInclude(f => f.User)
+                .Include(u => u.FolloweduserUsers).ThenInclude(f => f.User)
+                .FirstOrDefault();
+            return user;
+        }
     }
 }
