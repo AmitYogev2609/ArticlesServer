@@ -18,8 +18,8 @@ namespace ArticlesServerBL.Models
             User user = this.Users.Where(u => u.Email == email && u.Pswd == passwors)
                 .Include(u => u.FollwedInterests).ThenInclude(i => i.Interest).ThenInclude(ii => ii.ArticleInterestTypes).ThenInclude(ar => ar.Article).ThenInclude(art=>art.AuthorsArticles).ThenInclude(tf=>tf.User)
                 .Include(u => u.AuthorsArticles).ThenInclude(a => a.Article)
-                .Include(u => u.FolloweduserFollowings).ThenInclude(f => f.User).ThenInclude(u => u.AuthorsArticles).ThenInclude(ar => ar.Article)
-                .Include(u => u.FolloweduserUsers).ThenInclude(f => f.User)
+                .Include(u => u.FolloweduserFollowings).ThenInclude(f => f.User)
+                .Include(u => u.FolloweduserUsers).ThenInclude(f => f.Following).ThenInclude(u => u.AuthorsArticles).ThenInclude(ar => ar.Article)
                 .Include(u => u.FavoriteArticles).ThenInclude(f => f.Article)
                 .FirstOrDefault()
                 ;
@@ -147,11 +147,106 @@ namespace ArticlesServerBL.Models
         {
             User user = this.Users.Where(u => u.UserId == id)
                 .Include(u => u.AuthorsArticles).ThenInclude(a => a.Article)
-                .Include(u => u.FollwedInterests)
+                .Include(u => u.FollwedInterests).ThenInclude(fi=>fi.Interest)
                 .Include(u => u.FolloweduserFollowings).ThenInclude(f => f.User)
-                .Include(u => u.FolloweduserUsers).ThenInclude(f => f.User)
+                .Include(u => u.FolloweduserUsers).ThenInclude(f => f.Following)
                 .FirstOrDefault();
             return user;
+        }
+        public bool follewUser(int userid,int follewid)
+        {
+            User user= this.Users.Where(u=>u.UserId==userid).FirstOrDefault();
+            Followeduser followeduser = new Followeduser()
+            {
+                UserId = userid,
+                FollowingId = follewid,
+            };
+            user.FolloweduserUsers.Add(followeduser);
+            
+            this.SaveChanges();
+           return /*user1.Where(u=>u.FollowingId==userid).FirstOrDefault()!=null&&*/user.FolloweduserUsers.Where(u=>u.FollowingId==follewid).FirstOrDefault()!=null;
+            
+        }
+        public bool UnfollewUser(int userid, int follewid)
+        {
+            User user = this.Users.Where(u => u.UserId == userid).Include(u=>u.FolloweduserFollowings).Include(u=>u.FolloweduserUsers).FirstOrDefault();
+            Followeduser followeduser = user.FolloweduserUsers.Where(u => u.FollowingId == follewid).FirstOrDefault();
+           user.FolloweduserUsers.Remove(followeduser);
+            this.SaveChanges();
+            return user.FolloweduserUsers.Where(u => u.FollowingId == follewid).FirstOrDefault() == null;
+
+
+
+        }
+        public bool uptadeUserDetails(User user)
+        {
+            User userFromdb= this.Users.Where(u => u.UserId == user.UserId).FirstOrDefault();
+            if (userFromdb!=null)
+            { 
+                userFromdb.Email = user.Email;
+                userFromdb.FirstName = user.FirstName;
+                userFromdb.LastName = user.LastName;
+                userFromdb.UserName = user.UserName;
+                this.SaveChanges();
+                return true;
+            }
+            return false;
+
+        }
+        public Comment AddComment(Comment comment)
+        {
+            this.Comments.Add(comment);
+            this.SaveChanges();
+            int userid=comment.UserId;
+            int articleid = comment.ArticleId;
+            User user=this.Users.Where(u => u.UserId == userid).FirstOrDefault();
+            Article article=this.Articles.Where(ar=>ar.ArticleId==articleid).FirstOrDefault();
+            Comment comment1=user.Comments.Where(cm=>cm.ComentId==comment.ComentId).FirstOrDefault();
+            Comment comment2=article.Comments.Where(cm=>cm.ComentId==comment.ComentId).FirstOrDefault();
+            if(comment1 != null && comment2 != null)
+            return comment ;
+            return null;
+        }
+        public List<Comment> GetArticleComments(int Articleid)
+        {
+            Article article = this.Articles.Where(art => art.ArticleId == Articleid).Include(com=>com.Comments).ThenInclude(cm=>cm.User).FirstOrDefault();
+            List<Comment> comments = article.Comments.ToList<Comment>();
+            return comments;
+        }
+        public string GetArticleAuthors(int articleid)
+        {
+            string str = "";
+            Article arti = this.Articles.Where(art => art.ArticleId == articleid).Include(ar => ar.AuthorsArticles).ThenInclude(aa => aa.User).FirstOrDefault();
+            if(arti != null)
+            {
+                foreach (var item in arti.AuthorsArticles)
+                {
+                    if(str=="")
+                    {
+                        str += "by:@"+item.User.UserName;
+                    }
+                    else
+                    {
+                        str += ", @" + item.User.UserName;
+                    }
+                }
+            }
+            return str;
+        }
+        public Interest AddInterest(string name)
+        {
+            if(this.Interests.Where(intr=>intr.InterestName==name).FirstOrDefault()==null)
+            { 
+            Interest interest = new Interest()
+            {
+                InterestName = name,
+                IsMajor=false
+            };
+            this.Interests.Add(interest);
+            this.SaveChanges();
+            return interest;
+            }
+            return null;
         }
     }
 }

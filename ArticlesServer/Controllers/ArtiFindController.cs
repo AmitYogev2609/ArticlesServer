@@ -412,6 +412,152 @@ namespace ArticlesServer.Controllers
             Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
             return user;
         }
+        [Route("UnFollowUser")]
+        [HttpGet]
+        public User UnFollowUser( [FromQuery] int follewUserId)
+        {
+            User user = HttpContext.Session.GetObject<User>("theUser");
+            bool suc = context.UnfollewUser(user.UserId, follewUserId); ;
+            if (suc)
+            {
+                Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+                
+                 user = context.GetUserById(user.UserId);
+                return context.LogIn(user.Email, user.Pswd);
+            }
+            Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+            return null;
+        }
+        [Route("FollowUser")]
+        [HttpGet]
+        public User FollowUser([FromQuery] int follewUserId)
+        {
+            User user = HttpContext.Session.GetObject<User>("theUser");
+            bool suc = context.follewUser(user.UserId, follewUserId);
+            if (suc)
+            {
+                Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+               
+                user = context.GetUserById( user.UserId);
+                return context.LogIn(user.Email, user.Pswd);
+            }
+            Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+            return null;
+        }
+        [Route("LogOut")]
+        [HttpGet]
+        public List<Interest> LogOut()
+        {
+            HttpContext.Session.Remove("theUser");
+            context.SaveChanges();
+            return context.GetInterest();
+        }
+        [Route("uptadeUserDetailsWithImage")]
+        [HttpPost]
+        public async Task<ActionResult> uptadeUserDetailsWithImage([ModelBinder(BinderType = typeof(JsonModelBinder))] User myJsonObject,
+    IList<IFormFile> file)
+        {
+            try
+            {
+
+                User theUser = myJsonObject;
+                if (!context.uptadeUserDetails(theUser))
+                    return BadRequest();
+
+
+                if (file.First() == null)
+                    return BadRequest();
+
+                var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/UserImage", $"{theUser.UserId}.jpg");
+                FileInfo fileInfo= new FileInfo(path);
+                if (fileInfo.Exists)
+                {
+                    System.IO.File.Delete(path);
+                    fileInfo.Delete();
+                }
+                
+                using (var stream = new FileStream(path, FileMode.Create))
+                {
+                    await file.First().CopyToAsync(stream);
+
+                }
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest();
+            }
+
+        }
+        [Route("uptadeUserDetails")]
+        [HttpPost]
+        public async Task<ActionResult> uptadeUserDetails([FromBody] User theUser)
+        {
+            try
+            {
+                
+                if (context.uptadeUserDetails(theUser))
+                    return Ok();
+                return BadRequest();
+            }
+            catch (Exception e)
+            {
+                return BadRequest();
+            }
+        }
+        [Route("UploadComment")]
+        [HttpPost]
+        public Comment UploadComment([FromBody] Comment comment)
+        {
+            Comment comment1 = context.AddComment(comment);
+            if (comment1!=null)
+            {
+                
+                    Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+                    return comment1;
+                
+                
+            }
+            else
+            {
+                Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+                return null;
+            }
+        }
+        [Route("GetArticleComments")]
+        [HttpGet]
+        public List<Comment> GetArticleComments([FromQuery]int articleId)
+        {
+            List<Comment> comments=context.GetArticleComments(articleId);
+            if(comments!=null)
+            {
+                Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+                return comments;
+            }
+            Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+            return null;
+        }
+        [Route("GetArticleAuthors")]
+        [HttpGet]
+        public string GetArticleAuthors([FromQuery]int articleId)
+        {
+            string authors = context.GetArticleAuthors(articleId);
+            Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+            return authors;
+        }
+        [Route("AddInterest")]
+        [HttpPost]
+        public Interest AddInterest([FromBody] string InterestName)
+        {
+            Interest interest = context.AddInterest(InterestName);
+            if(interest!=null)
+            {
+                Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+                return interest;
+            }
+            Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+            return interest;
+        }
     }
 }
 //scaffold-dbcontext "Server=localhost\sqlexpress;Database=ArtiFindDB;Trusted_Connection=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -force Server=localhost\sqlexpress;Database=ArtiFindDB;Trusted_Connection=True;
