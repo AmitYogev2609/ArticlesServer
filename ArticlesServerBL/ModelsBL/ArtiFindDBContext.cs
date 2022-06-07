@@ -299,5 +299,13 @@ namespace ArticlesServerBL.Models
             }
             return null;
         }
+        public bool MakeUserAdmin(int userId)
+        {
+            User user = this.Users.Where(u => u.UserId == userId).FirstOrDefault();
+            if (user == null)
+                return false;
+            user.IsManger = true;
+            return true;
+        }
     }
 }

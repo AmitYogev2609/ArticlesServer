@@ -584,7 +584,24 @@ namespace ArticlesServer.Controllers
             Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
             return interest;
         }
-        
+        [Route("MakeUserAdmin")]
+        [HttpGet]
+        public bool MakeUserAdmin([FromQuery]int userId)
+        {
+            bool con = context.MakeUserAdmin(userId);
+            if(con)
+            {
+                Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+            }
+            else
+            {
+                Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+
+            }
+            return con;
+        }
+
+
     }
 }
 //scaffold-dbcontext "Server=localhost\sqlexpress;Database=ArtiFindDB;Trusted_Connection=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -force Server=localhost\sqlexpress;Database=ArtiFindDB;Trusted_Connection=True;
