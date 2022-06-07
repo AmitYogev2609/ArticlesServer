@@ -47,8 +47,26 @@ namespace ArticlesServerBL.Models
         public List<Interest> GetInterest()
         {
 
+            //foreach (var item in this.Articles.Include(au=>au.AuthorsArticles).ThenInclude(a=>a.User))
+            //{
+            //    string str = "";
+            //    foreach (var item1 in item.AuthorsArticles)
+            //    {
+            //         if(str=="")
+            //        {
+            //            str = $"by:@{item1.User.UserName}";
+            //        }
+            //         else
+            //        {
+            //            str += $", @{item1.User.UserName}";
+            //        }
+            //    }
+            //    item.AuthorsList = str;
+            //}
+            //this.SaveChanges();
             //List<Interest> Interest = this.Interests.Include(u=>u.ArticleInterestTypes).ThenInclude(arti=>arti.Article).ThenInclude(cle=>cle.AuthorsArticles).ThenInclude(ath=>ath.User)
             //    .Include(t=>t.FollwedInterests).ThenInclude(tu=>tu.User).ToList<Interest>();
+            
             List<Interest> Interest = this.Interests.Include(u => u.ArticleInterestTypes).ThenInclude(arti => arti.Article).ThenInclude(cle => cle.AuthorsArticles)
                 .ToList<Interest>();
 
@@ -67,6 +85,21 @@ namespace ArticlesServerBL.Models
             if (article == null)
                 return null;
             this.Articles.Add(article);
+            this.SaveChanges();
+            Article article1= this.Articles.Where(art=>art.ArticleId==article.ArticleId).Include(ar=>ar.AuthorsArticles).ThenInclude(ari=>ari.User).FirstOrDefault();
+            string str= "";
+            foreach (var item in article.AuthorsArticles)
+            {
+                if(str=="")
+                {
+                    str = $"by:@{item.User.UserName}";
+                }
+                else
+                {
+                    str+=$", @{item.User.UserName}";
+                }
+            }
+            article.AuthorsList = str;
             this.SaveChanges();
             return article;
         }
@@ -245,6 +278,24 @@ namespace ArticlesServerBL.Models
             this.Interests.Add(interest);
             this.SaveChanges();
             return interest;
+            }
+            return null;
+        }
+        public List<ArticleInterestType> GetArticleIntersetType(int articleId)
+        {
+            Article article= this.Articles.Where(ar=>ar.ArticleId==articleId).Include(art=>art.ArticleInterestTypes).ThenInclude(ait=>ait.Interest).FirstOrDefault();
+            if(article!=null)
+            {
+                return article.ArticleInterestTypes.ToList<ArticleInterestType>();
+            }
+            return null;
+        }
+        public List<AuthorsArticle> GetAuthorsArticle(int articleId)
+        {
+            Article article = this.Articles.Where(ar => ar.ArticleId == articleId).Include(art => art.AuthorsArticles).ThenInclude(ait => ait.User).FirstOrDefault();
+            if (article != null)
+            {
+                return article.AuthorsArticles.ToList<AuthorsArticle>();
             }
             return null;
         }

@@ -121,4 +121,6 @@ ALTER TABLE
     Article ADD Description NVARCHAR(255) NOT NULL
 ALTER TABLE
     FavoriteArticle ADD CONSTRAINT FavoriteArticle_PK Primary KEY(UserID, ArticleId)
+ALTER TABLE
+    Article ADD AuthorsList NVARCHAR(255) default('') NOT NULL
 

@@ -558,6 +558,33 @@ namespace ArticlesServer.Controllers
             Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
             return interest;
         }
+        [Route("GetArticleIntersetType")]
+        [HttpGet]
+        public List<ArticleInterestType> GetArticleIntersetType([FromQuery] int articleId)
+        {
+            List<ArticleInterestType> interest = context.GetArticleIntersetType(articleId);
+            if (interest != null)
+            {
+                Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+                return interest;
+            }
+            Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+            return interest;
+        }
+        [Route("GetAuthorsArticle")]
+        [HttpGet]
+        public List<AuthorsArticle> GetAuthorsArticle([FromQuery] int articleId)
+        {
+            List<AuthorsArticle> interest = context.GetAuthorsArticle(articleId);
+            if (interest != null)
+            {
+                Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+                return interest;
+            }
+            Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+            return interest;
+        }
+        
     }
 }
 //scaffold-dbcontext "Server=localhost\sqlexpress;Database=ArtiFindDB;Trusted_Connection=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -force Server=localhost\sqlexpress;Database=ArtiFindDB;Trusted_Connection=True;

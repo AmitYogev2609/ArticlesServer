@@ -53,6 +53,11 @@ namespace ArticlesServerBL.Models
                     .IsRequired()
                     .HasMaxLength(255);
 
+                entity.Property(e => e.AuthorsList)
+                    .IsRequired()
+                    .HasMaxLength(255)
+                    .HasDefaultValueSql("('')");
+
                 entity.Property(e => e.Description)
                     .IsRequired()
                     .HasMaxLength(255);
@@ -104,13 +109,13 @@ namespace ArticlesServerBL.Models
                     .WithMany(p => p.ArticleReports)
                     .HasForeignKey(d => d.ReportedArticleId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__ArticleRe__Repor__5070F446");
+                    .HasConstraintName("FK__ArticleRe__Repor__36B12243");
 
                 entity.HasOne(d => d.UserIdReportedNavigation)
                     .WithMany(p => p.ArticleReports)
                     .HasForeignKey(d => d.UserIdReported)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__ArticleRe__UserI__4F7CD00D");
+                    .HasConstraintName("FK__ArticleRe__UserI__35BCFE0A");
             });
 
             modelBuilder.Entity<AuthorsArticle>(entity =>
@@ -140,7 +145,7 @@ namespace ArticlesServerBL.Models
             modelBuilder.Entity<Comment>(entity =>
             {
                 entity.HasKey(e => e.ComentId)
-                    .HasName("PK__Comment__A7BAF2A8D26E6E44");
+                    .HasName("PK__Comment__A7BAF2A8472BA779");
 
                 entity.ToTable("Comment");
 
@@ -310,13 +315,13 @@ namespace ArticlesServerBL.Models
                     .WithMany(p => p.UserReportReportedUsers)
                     .HasForeignKey(d => d.ReportedUserId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__UserRepor__Repor__5DCAEF64");
+                    .HasConstraintName("FK__UserRepor__Repor__3A81B327");
 
                 entity.HasOne(d => d.UserIdReportedNavigation)
                     .WithMany(p => p.UserReportUserIdReportedNavigations)
                     .HasForeignKey(d => d.UserIdReported)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__UserRepor__UserI__5CD6CB2B");
+                    .HasConstraintName("FK__UserRepor__UserI__398D8EEE");
             });
 
             OnModelCreatingPartial(modelBuilder);
