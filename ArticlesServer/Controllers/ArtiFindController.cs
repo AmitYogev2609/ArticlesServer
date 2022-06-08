@@ -195,8 +195,8 @@ namespace ArticlesServer.Controllers
             }
 
         }
-
-            [Route("SignUpWithImage_Old")]
+        //not used
+        [Route("SignUpWithImage_Old")]
         [HttpPost]
         public async Task<ActionResult> SignUPWithIamge(IFormCollection data, IFormFile file)
         {
@@ -246,7 +246,7 @@ namespace ArticlesServer.Controllers
         //sign up without image
         [Route("SignUp")]
         [HttpPost]
-        public async Task<ActionResult> Signup([FromBody]User theUser)
+        public async Task<ActionResult> SignUp([FromBody]User theUser)
         {
             try
             { 
