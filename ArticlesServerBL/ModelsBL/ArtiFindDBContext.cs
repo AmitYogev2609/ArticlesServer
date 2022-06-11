@@ -306,7 +306,7 @@ namespace ArticlesServerBL.Models
                 return false;
             user.IsManger = true;
             this.SaveChanges();
-            return true;
+            return user.IsManger;
         }
     }
 }
